@@ -1,22 +1,30 @@
 package sortClasses;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
-public abstract class Sort<T> {
-    protected final List<T> array;
-    protected List<T> sortedArray = null;
+
+public abstract class Sort {
+    protected final List<Integer> array;
+    protected List<Integer> sortedArray;
+
+    public Sort(List<Integer> array){
+        this.array = array;
+        this.sortedArray = new ArrayList<>(array);
+    }
+
+    public Sort(int size, int bound){
+        this.array = RandomElements.getRandomIntegerElements(size, bound);
+        this.sortedArray = new ArrayList<>(array);
+    }
 
     public abstract void sort();
 
-    public List<T> getArray(){
+    public List<Integer> getArray(){
         return new ArrayList<>(array);
     }
 
-    public List<T> getSortedArray(){
-        return sortedArray == null ? null : new ArrayList<>(sortedArray);
+    public List<Integer> getSortedArray(){
+        return new ArrayList<>(sortedArray);
     }
 }

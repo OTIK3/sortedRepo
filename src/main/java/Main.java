@@ -1,9 +1,14 @@
-import sortClasses.QuickSort;
+import sortClasses.CocktailSort;
+import sortClasses.BubbleSort;
+import sortClasses.RandomElements;
 
 public class Main {
     public static void main(String[] args) {
-        QuickSort quickSort = new QuickSort(RandomElements.getRandomIntegerElements(500));
+        var list = RandomElements.getRandomIntegerElements(100, 500);
+        BubbleSort quickSort = new BubbleSort(list);
+        CocktailSort cocktailSort = new CocktailSort(list);
         OutputElements.output(quickSort);
-        OutputElements.outputFromFile(quickSort);
+        OutputElements.output(cocktailSort);
+//        OutputElements.outputFromFile(quickSort);
     }
 }

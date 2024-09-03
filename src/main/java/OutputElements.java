@@ -1,6 +1,9 @@
 import lombok.SneakyThrows;
 import sortClasses.Sort;
 
+import java.time.Duration;
+import java.time.Instant;
+
 public class OutputElements {
 
     public static void output(Sort sort){
@@ -8,12 +11,8 @@ public class OutputElements {
         sort.getArray().forEach(v -> System.out.print(v + " "));
         System.out.println("\nМассив после: ");
 
-        long startTime = System.nanoTime();
         sort.sort();
         sort.getSortedArray().forEach(v -> System.out.print(v + " "));
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-        System.out.println("\nМетод выполнился за " + duration + " наносекунд.");
     }
 
     @SneakyThrows
