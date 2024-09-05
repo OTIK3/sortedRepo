@@ -3,7 +3,6 @@ package sortClasses;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public abstract class Sort {
     protected final List<Integer> array;
     protected List<Integer> sortedArray;

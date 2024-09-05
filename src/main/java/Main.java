@@ -1,14 +1,8 @@
-import sortClasses.CocktailSort;
-import sortClasses.BubbleSort;
-import sortClasses.RandomElements;
-
+//TODO сделать проверку отсортированного массива (проверка соседних, если не правильно то вызов исключения)
+//TODO сделать проверку количества элементов
+//TODO время выводить всегда, посмотреть дубликаты (соотношение размера и диапазона)
 public class Main {
     public static void main(String[] args) {
-        var list = RandomElements.getRandomIntegerElements(100, 500);
-        BubbleSort quickSort = new BubbleSort(list);
-        CocktailSort cocktailSort = new CocktailSort(list);
-        OutputElements.output(quickSort);
-        OutputElements.output(cocktailSort);
-//        OutputElements.outputFromFile(quickSort);
+        StartChoice.start();
     }
 }
