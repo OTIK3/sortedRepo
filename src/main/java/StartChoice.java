@@ -3,11 +3,12 @@ import sortClasses.BubbleSort;
 import sortClasses.CocktailSort;
 import sortClasses.Sort;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class StartChoice {
     @SneakyThrows
-    public static void start(){
+    public static void start() throws IOException {
         Scanner in = new Scanner(System.in);
         Sort sort;
         int choiceValue = 0;
