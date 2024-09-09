@@ -1,7 +1,7 @@
 import lombok.SneakyThrows;
-import sortClasses.BubbleSort;
-import sortClasses.CocktailSort;
-import sortClasses.Sort;
+import sorts.init.BubbleSort;
+import sorts.init.CocktailSort;
+import sorts.Sort;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -54,7 +54,7 @@ public class StartChoice {
             if (isFileActive)
                 ActiveFile.inputArrayToFile(sort);
             else
-                OutputElements.output(sort);
+                DisplayArray.output(sort);
 
             System.out.println("\n\t Данные записаны, если выбрали файл, то можете в него посмотреть\n");
         }

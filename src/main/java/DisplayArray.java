@@ -1,10 +1,6 @@
-import lombok.SneakyThrows;
-import sortClasses.Sort;
+import sorts.Sort;
 
-import java.time.Duration;
-import java.time.Instant;
-
-public class OutputElements {
+public class DisplayArray {
 
     public static void output(Sort sort){
         System.out.println("Массив до: ");

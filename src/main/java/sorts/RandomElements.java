@@ -1,4 +1,4 @@
-package sortClasses;
+package sorts;
 
 import java.util.ArrayList;
 import java.util.Random;

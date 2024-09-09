@@ -1,4 +1,4 @@
-import sortClasses.Sort;
+import sorts.Sort;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;

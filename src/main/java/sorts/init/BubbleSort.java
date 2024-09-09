@@ -1,7 +1,11 @@
-package sortClasses;
+package sorts.init;
+
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import sorts.Sort;
 
 import java.util.List;
-
+@State(Scope.Thread)
 public class BubbleSort extends Sort {
     public BubbleSort(List<Integer> array) {
         super(array);
