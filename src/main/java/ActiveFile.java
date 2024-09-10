@@ -1,12 +1,13 @@
+import lombok.SneakyThrows;
 import sorts.Sort;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class ActiveFile {
-    public static void inputArrayToFile(Sort sort) throws IOException {
+    @SneakyThrows
+    public static void inputArrayToFile(Sort sort){
         FileWriter writer = new FileWriter("example.txt", false);
         List<Integer> array = sort.getArray();
         List<Integer> sortedArray = sort.getSortedArray();
@@ -31,7 +32,8 @@ public class ActiveFile {
         writer.close();
     }
 
-    public static void outputFile() throws IOException {
+    @SneakyThrows
+    public static void outputFile(){
         FileInputStream fileInputStream = new FileInputStream("example.txt");
         int data;
         while ((data = fileInputStream.read()) != -1) {

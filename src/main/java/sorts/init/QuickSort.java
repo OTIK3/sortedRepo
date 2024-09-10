@@ -5,7 +5,6 @@ import sorts.Sort;
 import java.util.List;
 
 public class QuickSort extends Sort {
-    private List<Integer> copyArray;
 
     public QuickSort(List<Integer> array) {
         super(array);
@@ -17,51 +16,36 @@ public class QuickSort extends Sort {
 
     @Override
     public void sort() {
-        copyArray = array;
-        sortPartArray(0, copyArray.size() - 1);
-        sortedArray = copyArray;
+        sortPartArray(0, sortedArray.size() - 1);
     }
 
-    //TODO при прогоне рекурсии не понимаю как в конце сравнивать значения!!
     private void sortPartArray(int leftIndex, int rightIndex){
-        if (leftIndex == rightIndex) {
-            if (leftIndex == 0 && copyArray.get(leftIndex) > copyArray.get(leftIndex+1)){
-                int count = copyArray.get(leftIndex);
-                copyArray.set(leftIndex, copyArray.get(leftIndex + 1));
-                copyArray.set(leftIndex + 1, count);
-            }
-            else if (copyArray.get(rightIndex)){
-            }
-        }
-        int refIndex = (rightIndex + leftIndex)/2;
-        int copyLeftIndex = leftIndex;
-        int copyRightIndex = rightIndex;
+        if (leftIndex >= rightIndex)
+            return;
 
-        int ref = copyArray.get(refIndex);
-        int left = copyArray.get(leftIndex);
-        int right = copyArray.get(rightIndex);
-
-        for (int i = leftIndex; i < rightIndex; i++) {
-            if (copyLeftIndex == copyRightIndex)
-                break;
-
-            if (left > ref && right < ref){
-                copyArray.set(copyLeftIndex, right);
-                copyArray.set(copyRightIndex, left);
-                left = copyArray.get(++copyLeftIndex);
-                right = copyArray.get(--copyRightIndex);
-            }
-            else {
-                if (left <= ref && (copyLeftIndex + 1) <= refIndex){
-                    left = copyArray.get(++copyLeftIndex);
+        int pivot = leftIndex;
+        int left = leftIndex + 1;
+        int right = rightIndex;
+        while(left <= right){
+            if (sortedArray.get(left) > sortedArray.get(pivot)){
+                if (sortedArray.get(right) <= sortedArray.get(pivot)){
+                    swap(left, right);
                 }
-                if (right >= ref && (copyRightIndex - 1) >= refIndex){
-                    right = copyArray.get(--copyRightIndex);
-                }
+                else
+                    right--;
             }
+            else
+                swap(left++, pivot++);
         }
 
-        sortPartArray(leftIndex, refIndex - 1);
-        sortPartArray(refIndex + 1, rightIndex);
+        sortPartArray(leftIndex, pivot - 1);
+        sortPartArray(pivot + 1, rightIndex);
     }
+
+    private void swap(int first, int second){
+        int copy = sortedArray.get(first);
+        sortedArray.set(first, sortedArray.get(second));
+        sortedArray.set(second, copy);
+    }
+
 }

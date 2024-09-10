@@ -1,12 +1,8 @@
 package sorts.init;
-
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
 import sorts.Sort;
 
 import java.util.List;
 
-@State(Scope.Thread)
 public class CocktailSort extends Sort {
     public CocktailSort(List<Integer> array) {
         super(array);

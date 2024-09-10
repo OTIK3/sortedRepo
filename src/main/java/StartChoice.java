@@ -1,14 +1,15 @@
+import lombok.SneakyThrows;
 import sorts.Sort;
 import sorts.enums.SortsEnum;
 import sorts.support.Correct;
 import sorts.support.FabricSorts;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
 public class StartChoice {
-    public static void start() throws IOException {
+    @SneakyThrows
+    public static void start(){
         Scanner in = new Scanner(System.in);
         Sort sort;
         List<SortsEnum> enums = List.of(SortsEnum.values());
