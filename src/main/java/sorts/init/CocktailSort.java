@@ -15,27 +15,26 @@ public class CocktailSort extends Sort {
     @Override
     public void sort() {
         for (int i = 0; i < sortedArray.size() - i; i++) {
-            boolean isSorted1 = true, isSorted2 = true;
+            boolean isSorted = true;
             for (int j = sortedArray.size() - i - 1; j >= i + 1; j--) {
                 if (sortedArray.get(j) < sortedArray.get(j - 1)){
                     var z = sortedArray.get(j);
                     sortedArray.set(j, sortedArray.get(j - 1));
                     sortedArray.set(j - 1, z);
-                    isSorted1 = false;
+                    isSorted = false;
                 }
             }
+
+            if (isSorted)
+                return;
 
             for (int j = i + 1; j < sortedArray.size() - i - 1; j++) {
                 if (sortedArray.get(j) > sortedArray.get(j + 1)){
                     var z = sortedArray.get(j);
                     sortedArray.set(j, sortedArray.get(j + 1));
                     sortedArray.set(j + 1, z);
-                    isSorted2 = false;
                 }
             }
-
-            if (isSorted1 && isSorted2)
-                return;
         }
 
     }

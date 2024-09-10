@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum SortsEnum {
 
     BUBBLE(1, "Пузырьковая сортировка", "BubbleSort"),
-    COCKTAIL(2, "Шейкерная сортировка", "CocktailSort"),
+    COCKTAIL(2, "Шейкер сортировка", "CocktailSort"),
     QUICK(3, "Быстрая сортировка", "QuickSort");
 
     private final int index;

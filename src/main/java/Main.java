@@ -1,5 +1,4 @@
-//TODO время выводить всегда, посмотреть дубликаты (соотношение размера и диапазона)
-//TODO подправить меню
+//TODO посмотреть дубликаты (соотношение размера и диапазона)
 public class Main {
     public static void main(String[] args){
         StartChoice.start();
