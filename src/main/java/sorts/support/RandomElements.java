@@ -1,4 +1,4 @@
-package sorts;
+package sorts.support;
 
 import java.util.ArrayList;
 import java.util.Random;

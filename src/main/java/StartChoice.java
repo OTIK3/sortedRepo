@@ -1,53 +1,56 @@
-import lombok.SneakyThrows;
-import sorts.init.BubbleSort;
-import sorts.init.CocktailSort;
 import sorts.Sort;
+import sorts.enums.SortsEnum;
+import sorts.support.Correct;
+import sorts.support.FabricSorts;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class StartChoice {
-    @SneakyThrows
     public static void start() throws IOException {
         Scanner in = new Scanner(System.in);
         Sort sort;
-        int choiceValue = 0;
+        List<SortsEnum> enums = List.of(SortsEnum.values());
 
         System.out.println("Добро пожаловать в меню выбора сортировок!\n");
         while(true){
+            int choiceValue;
             System.out.println("Выберите сортировку (0 -> выход):");
-            System.out.println("\t 1 -> Сортировка пузырьком");
-            System.out.println("\t 2 -> Сортировка перемешиванием");
-            do {
-                choiceValue = in.nextInt();
-            } while (choiceValue != 1 && choiceValue != 2 && choiceValue != 0);
+            enums.forEach(v -> System.out.println("\t " + v.getIndex() + " -> " + v.getName()));
 
-            if (choiceValue == 0)
-                break;
+            do choiceValue = in.nextInt();
+            while (choiceValue < 0 || choiceValue > enums.size());
 
-            int size = 0, bound = 0;
+            if (choiceValue == 0) break;
+
+            int size, bound;
             System.out.println("Выберите количество элементов и диапазон значение от 0 до ...");
+
             System.out.print("\t Количество элементов -> ");
-            do {
-                size = in.nextInt();
-            } while(size <= 0);
+            do size = in.nextInt();
+            while(size <= 0);
 
             System.out.print("\t Диапазон значений -> ");
             bound = in.nextInt();
 
-            switch (choiceValue){
-                case 1 -> sort = new BubbleSort(size, bound);
-                case 2 -> sort = new CocktailSort(size, bound);
-                default -> sort = new BubbleSort(size, bound);
-            }
+            sort = FabricSorts.getSortByIndex(choiceValue, size, bound);
 
-            boolean isFileActive = false;
+            boolean isFileActive;
             System.out.println("Выберите вывод в консоль или файл (0 - консоль, 1 - файл):");
-            int choiceFlag = in.nextInt();
-            isFileActive = choiceFlag > 0;
+            int activeFile = in.nextInt();
+            isFileActive = activeFile > 0;
+
+            boolean isTimed;
+            System.out.println("Выводить-ли скорость выполнения сортировки (0 - нет, 1 - да)");
+            int time = in.nextInt();
+            isTimed = time > 0;
 
             System.out.println("Начинается сортировка...");
+            long startTime = System.nanoTime();
             sort.sort();
+            long endTime = System.nanoTime();
+            long runTime = endTime - startTime;
             System.out.println("Сортировка закончилась...");
 
             System.out.println("Идет вывод в зависимости от выбранных данных:");
@@ -56,7 +59,14 @@ public class StartChoice {
             else
                 DisplayArray.output(sort);
 
-            System.out.println("\n\t Данные записаны, если выбрали файл, то можете в него посмотреть\n");
+            if (isTimed)
+                System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + " m/s)");
+
+            System.out.println("\n\t Данные проверены и они" +
+                    (Correct.isValidSortArray(sort.getSortedArray()) ? " ": " не ") + "корректны");
+            System.out.println("\t Количество элементов до и после сортировки -> " +
+                    sort.getArray().size() + " : " + sort.getSortedArray().size());
+            System.out.println("\t Данные записаны, если выбрали файл, то можете в него посмотреть\n");
         }
     }
 }
