@@ -13,19 +13,19 @@ public class StartChoice {
         Sort sort;
         List<SortsEnum> enums = List.of(SortsEnum.values());
 
-        System.out.println("Добро пожаловать в меню выбора сортировок!\n");
+        System.out.println("\n\nДобро пожаловать в меню выбора сортировок!\n");
         while(true){
             int choiceValue;
-            System.out.println("Выберите сортировку (0 -> выход):");
+            System.out.println("\nВыберите сортировку (0 -> выход):");
             enums.forEach(v -> System.out.println("\t " + v.getIndex() + " -> " + v.getName()));
-
+            System.out.print("\t -> ");
             do choiceValue = in.nextInt();
             while (choiceValue < 0 || choiceValue > enums.size());
 
             if (choiceValue == 0) break;
 
             int size, bound;
-            System.out.println("Выберите количество элементов и диапазон значение от 0 до ...");
+            System.out.println("\nВыберите количество элементов и диапазон значение от 0 до ...");
 
             System.out.print("\t Количество элементов -> ");
             do size = in.nextInt();
@@ -37,30 +37,30 @@ public class StartChoice {
             sort = FabricSorts.getSortByIndex(choiceValue, size, bound);
 
             boolean isFileActive;
-            System.out.println("Выберите вывод в консоль или файл (0 - консоль, 1 - файл):");
+            System.out.print("\nВыберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
             int activeFile = in.nextInt();
             isFileActive = activeFile > 0;
 
             boolean isTimed;
-            System.out.println("Выводить-ли скорость выполнения сортировки (0 - нет, 1 - да)");
+            System.out.print("Выводить-ли скорость выполнения сортировки (1 - да, 0 - нет): ");
             int time = in.nextInt();
             isTimed = time > 0;
 
-            System.out.println("Начинается сортировка...");
+            System.out.println("\n---> Начинается сортировка...");
             long startTime = System.nanoTime();
             sort.sort();
             long endTime = System.nanoTime();
             long runTime = endTime - startTime;
-            System.out.println("Сортировка закончилась...");
+            System.out.println("---> Сортировка закончилась...");
 
-            System.out.println("Идет вывод в зависимости от выбранных данных:");
+            System.out.println("---> Идет вывод в зависимости от выбранных данных:");
             if (isFileActive)
                 ActiveFile.inputArrayToFile(sort);
             else
                 DisplayArray.output(sort);
 
             if (isTimed)
-                System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + " m/s)");
+                System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
 
             System.out.println("\n\t Данные проверены и они" +
                     (Correct.isValidSortArray(sort.getSortedArray()) ? " ": " не ") + "корректны");
