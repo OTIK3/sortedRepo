@@ -16,7 +16,8 @@ public class QuickSort extends Sort {
 
     @Override
     public void sort() {
-        sortPartArray(0, sortedArray.size() - 1);
+//        sortPartArray(0, sortedArray.size() - 1);
+        sortPartArrayBestTime(0, sortedArray.size() - 1);
     }
 
     /** Алгоритм работает следующим образом:
@@ -68,10 +69,41 @@ public class QuickSort extends Sort {
         sortPartArray(pivot + 1, rightIndex);
     }
 
+    //TODO довести до ума алгоритм, хоть он и работает
+    private void sortPartArrayBestTime(int leftIndex, int rightIndex){
+        if (leftIndex >= rightIndex)
+            return;
+
+        int pivot = getBestIndex(leftIndex, rightIndex);
+        int left = leftIndex;
+        int right = rightIndex;
+        while(left <= right){
+            if (sortedArray.get(left) <= sortedArray.get(pivot)) {
+                if (left > pivot)
+                    swap(left, pivot++);
+                left++;
+            }
+            else {
+                if (sortedArray.get(right) <= sortedArray.get(pivot))
+                    swap(left, right);
+                else if (right < pivot)
+                    swap(right, pivot--);
+                right--;
+            }
+        }
+
+        sortPartArray(leftIndex, pivot - 1);
+        sortPartArray(pivot + 1, rightIndex);
+    }
+
     private void swap(int first, int second){
         int copy = sortedArray.get(first);
         sortedArray.set(first, sortedArray.get(second));
         sortedArray.set(second, copy);
+    }
+
+    private int getBestIndex(int leftIndex, int rightIndex){
+        return (leftIndex + rightIndex)/2;
     }
 
 }

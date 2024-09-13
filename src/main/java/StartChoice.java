@@ -8,24 +8,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class StartChoice {
+    private static final Scanner in = new Scanner(System.in);
+    private static final List<SortsEnum> enums = List.of(SortsEnum.values());
+    private static Sort sort;
+    private static boolean isFile, isTimed;
+    private static int choiceValue, size, bound;
+
     @SneakyThrows
     public static void start(){
-        Scanner in = new Scanner(System.in);
-        Sort sort;
-        List<SortsEnum> enums = List.of(SortsEnum.values());
-
         System.out.println("\n\nДобро пожаловать в меню выбора сортировок!\n");
         while(true){
-            int choiceValue;
-            System.out.println("\nВыберите сортировку (0 -> выход):");
-            enums.forEach(v -> System.out.println("\t " + v.getIndex() + " -> " + v.getName()));
-            System.out.print("\t -> ");
-            do choiceValue = in.nextInt();
-            while (choiceValue < 0 || choiceValue > enums.size());
-
-            if (choiceValue == 0) break;
-
-            int size, bound;
+            choiceSort();
             System.out.println("\nВыберите количество элементов и диапазон значение от 0 до ...");
 
             System.out.print("\t Количество элементов -> ");
@@ -35,39 +28,85 @@ public class StartChoice {
             System.out.print("\t Диапазон значений -> ");
             bound = in.nextInt();
 
-            sort = FabricSorts.getSortByIndex(choiceValue, size, bound);
-
-            boolean isFileActive;
             System.out.print("\nВыберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
             int activeFile = in.nextInt();
-            isFileActive = activeFile > 0;
+            isFile = activeFile > 0;
 
-            boolean isTimed;
             System.out.print("Выводить-ли скорость выполнения сортировки (1 - да, 0 - нет): ");
             int time = in.nextInt();
             isTimed = time > 0;
 
-            System.out.println("\n---> Начинается сортировка...");
-            long startTime = System.nanoTime();
-            sort.sort();
-            long endTime = System.nanoTime();
-            long runTime = endTime - startTime;
-            System.out.println("---> Сортировка закончилась...");
+            sort = FabricSorts.getSortByIndex(choiceValue, size, bound);
+            sortAndOutput();
 
-            System.out.println("---> Идет вывод в зависимости от выбранных данных:");
-            if (isFileActive)
-                ActiveFile.inputArrayToFile(sort);
-            else
-                DisplayArray.output(sort);
-
-            if (isTimed)
-                System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
-
-            System.out.println("\n\t Данные проверены и они" +
-                    (Correct.isValidSortArray(sort.getSortedArray()) ? " ": " не ") + "корректны");
-            System.out.println("\t Количество элементов до и после сортировки -> " +
-                    sort.getArray().size() + " : " + sort.getSortedArray().size());
-            System.out.println("\t Данные записаны, если выбрали файл, то можете в него посмотреть\n");
+            boolean isActive;
+            do  isActive = repeatMenu();
+            while (isActive);
         }
+    }
+
+    private static void choiceSort(){
+        System.out.println("\nВыберите сортировку (0 -> выход):");
+        enums.forEach(v -> System.out.println("\t " + v.getIndex() + " -> " + v.getName()));
+        System.out.print("\t -> ");
+        do choiceValue = in.nextInt();
+        while (choiceValue < 0 || choiceValue > enums.size());
+        if (choiceValue == 0) System.exit(0);
+    }
+
+    private static void sortAndOutput(){
+        System.out.println("\n---> Начинается сортировка...");
+        long startTime = System.nanoTime();
+        sort.sort();
+        long endTime = System.nanoTime();
+        long runTime = endTime - startTime;
+        System.out.println("---> Сортировка закончилась...");
+
+        System.out.println("---> Идет вывод в зависимости от выбранных данных:");
+        if (isFile)
+            ActiveFile.inputArrayToFile(sort);
+        else
+            DisplayArray.output(sort);
+
+        if (isTimed) {
+            System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
+        }
+
+        System.out.println("\n\t Данные проверены и они" +
+                (Correct.isValidSortArray(sort.getSortedArray()) ? " ": " не ") + "корректны");
+        System.out.println("\t Количество элементов до и после сортировки -> " +
+                sort.getArray().size() + " : " + sort.getSortedArray().size());
+        System.out.println("\t Данные записаны, если выбрали файл, то можете в него посмотреть\n");
+    }
+
+    private static boolean repeatMenu(){
+        System.out.println("Выберите опцию: ");
+        System.out.print(
+                "\t1 -> Повторить сортировку для новых данных\n" +
+                "\t2 -> Выбрать другую сортировку по тем же данным\n" +
+                "\t3... -> Вызвать меню выбора\n\t-> "
+        );
+
+        int index = choiceValue;
+        choiceValue = in.nextInt();
+
+        boolean isActive = true;
+        switch (choiceValue){
+            case 1 -> {
+                sort = FabricSorts.getSortByIndex(index, size, bound);
+                sortAndOutput();
+            }
+            case 2 -> {
+                choiceSort();
+                index = choiceValue;
+                sort = FabricSorts.getSortByIndexWithArray(index, sort.getArray());
+                sortAndOutput();
+            }
+            default -> {
+                isActive = false;
+            }
+        }
+
+        return isActive;
     }
 }

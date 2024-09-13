@@ -11,7 +11,7 @@ public class CocktailSort extends Sort {
     public CocktailSort(int size, int bound){
         super(size, bound);
     }
-
+    //TODO обмены заменить сдвигами до тех пор пока не будет элемента больше
     @Override
     public void sort() {
         for (int i = 0; i < sortedArray.size() - i; i++) {
