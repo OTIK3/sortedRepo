@@ -12,21 +12,16 @@ public class StartChoice {
     private static final List<SortsEnum> enums = List.of(SortsEnum.values());
     private static Sort sort;
     private static boolean isFile, isTimed;
-    private static int choiceValue, size, bound;
+    private static int index;
+    private static int size;
+    private static int bound;
 
     @SneakyThrows
     public static void start(){
         System.out.println("\n\nДобро пожаловать в меню выбора сортировок!\n");
         while(true){
             choiceSort();
-            System.out.println("\nВыберите количество элементов и диапазон значение от 0 до ...");
-
-            System.out.print("\t Количество элементов -> ");
-            do size = in.nextInt();
-            while(size <= 0);
-
-            System.out.print("\t Диапазон значений -> ");
-            bound = in.nextInt();
+            initSizeAndBound();
 
             System.out.print("\nВыберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
             int activeFile = in.nextInt();
@@ -36,7 +31,7 @@ public class StartChoice {
             int time = in.nextInt();
             isTimed = time > 0;
 
-            sort = FabricSorts.getSortByIndex(choiceValue, size, bound);
+            sort = FabricSorts.getSortByIndex(index, size, bound);
             sortAndOutput();
 
             boolean isActive;
@@ -49,13 +44,24 @@ public class StartChoice {
         System.out.println("\nВыберите сортировку (0 -> выход):");
         enums.forEach(v -> System.out.println("\t " + v.getIndex() + " -> " + v.getName()));
         System.out.print("\t -> ");
-        do choiceValue = in.nextInt();
-        while (choiceValue < 0 || choiceValue > enums.size());
-        if (choiceValue == 0) System.exit(0);
+        do index = in.nextInt();
+        while (index < 0 || index > enums.size());
+        if (index == 0) System.exit(0);
+    }
+
+    private static void initSizeAndBound(){
+        System.out.println("\nВыберите количество элементов и диапазон значение от 0 до ...");
+
+        System.out.print("\t Количество элементов -> ");
+        do size = in.nextInt();
+        while(size <= 0);
+
+        System.out.print("\t Диапазон значений -> ");
+        bound = in.nextInt();
     }
 
     private static void sortAndOutput(){
-        System.out.println("\n---> Начинается сортировка...");
+        System.out.println("\n---> Начинается сортировка " + sort.getClass().getSimpleName() +  " ...");
         long startTime = System.nanoTime();
         sort.sort();
         long endTime = System.nanoTime();
@@ -83,12 +89,12 @@ public class StartChoice {
         System.out.println("Выберите опцию: ");
         System.out.print(
                 "\t1 -> Повторить сортировку для новых данных\n" +
-                "\t2 -> Выбрать другую сортировку по тем же данным\n" +
-                "\t3... -> Вызвать меню выбора\n\t-> "
+                "\t2 -> Повторить сортировку для другой размерности\n" +
+                "\t3 -> Выбрать другую сортировку по тем же данным\n" +
+                "\t4... -> Вызвать меню выбора\n\t-> "
         );
 
-        int index = choiceValue;
-        choiceValue = in.nextInt();
+        int choiceValue = in.nextInt();
 
         boolean isActive = true;
         switch (choiceValue){
@@ -97,8 +103,12 @@ public class StartChoice {
                 sortAndOutput();
             }
             case 2 -> {
+                initSizeAndBound();
+                sort = FabricSorts.getSortByIndex(index, size, bound);
+                sortAndOutput();
+            }
+            case 3 -> {
                 choiceSort();
-                index = choiceValue;
                 sort = FabricSorts.getSortByIndexWithArray(index, sort.getArray());
                 sortAndOutput();
             }

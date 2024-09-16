@@ -4,6 +4,10 @@ import sorts.Sort;
 import java.util.List;
 
 public class CocktailSort extends Sort {
+    private int swapIndex = -1;
+    private int swapValue = -1;
+    private boolean isSorted;
+
     public CocktailSort(List<Integer> array) {
         super(array);
     }
@@ -11,31 +15,60 @@ public class CocktailSort extends Sort {
     public CocktailSort(int size, int bound){
         super(size, bound);
     }
-    //TODO обмены заменить сдвигами до тех пор пока не будет элемента больше
+
     @Override
     public void sort() {
-        for (int i = 0; i < sortedArray.size() - i; i++) {
-            boolean isSorted = true;
-            for (int j = sortedArray.size() - i - 1; j >= i + 1; j--) {
-                if (sortedArray.get(j) < sortedArray.get(j - 1)){
-                    var z = sortedArray.get(j);
-                    sortedArray.set(j, sortedArray.get(j - 1));
-                    sortedArray.set(j - 1, z);
-                    isSorted = false;
+        for (int i = 0; i < sortedArray.size()/2; i++) {
+            rightToLeft(sortedArray.size() - i - 1, i + 1);
+
+            if (isSorted) return;
+
+            leftToRight(i + 1, sortedArray.size() - i - 1);
+        }
+    }
+
+    private void rightToLeft(int startIndex, int endIndex){
+        isSorted = true;
+        for (int j = startIndex; j >= endIndex; j--) {
+            if ((swapIndex >= 0 ? swapValue : sortedArray.get(j)) < sortedArray.get(j - 1)){
+                if (swapIndex < 0) {
+                    swapIndex = j;
+                    swapValue = sortedArray.get(swapIndex);
+                }
+
+                sortedArray.set(j, sortedArray.get(j - 1));
+                isSorted = false;
+
+                if (endIndex == j) {
+                    sortedArray.set(j - 1, swapValue);
                 }
             }
-
-            if (isSorted)
-                return;
-
-            for (int j = i + 1; j < sortedArray.size() - i - 1; j++) {
-                if (sortedArray.get(j) > sortedArray.get(j + 1)){
-                    var z = sortedArray.get(j);
-                    sortedArray.set(j, sortedArray.get(j + 1));
-                    sortedArray.set(j + 1, z);
-                }
+            else if (swapIndex >= 0){
+                sortedArray.set(j, swapValue);
+                swapIndex = -1;
             }
         }
+        swapIndex = -1;
+    }
 
+    private void leftToRight(int startIndex, int endIndex){
+        for (int j = startIndex; j < endIndex; j++) {
+            if ((swapIndex >= 0 ? swapValue : sortedArray.get(j)) > sortedArray.get(j + 1)){
+                if (swapIndex < 0) {
+                    swapIndex = j;
+                    swapValue = sortedArray.get(swapIndex);
+                }
+
+                sortedArray.set(j, sortedArray.get(j + 1));
+
+                if (endIndex - 1 == j)
+                    sortedArray.set(j + 1, swapValue);
+            }
+            else if (swapIndex >= 0){
+                sortedArray.set(j, swapValue);
+                swapIndex = -1;
+            }
+        }
+        swapIndex = -1;
     }
 }

@@ -16,8 +16,8 @@ public class QuickSort extends Sort {
 
     @Override
     public void sort() {
-//        sortPartArray(0, sortedArray.size() - 1);
-        sortPartArrayBestTime(0, sortedArray.size() - 1);
+        sortPartArray(0, sortedArray.size() - 1);
+//        sortPartArrayBestTime(0, sortedArray.size() - 1);
     }
 
     /** Алгоритм работает следующим образом:
@@ -69,7 +69,7 @@ public class QuickSort extends Sort {
         sortPartArray(pivot + 1, rightIndex);
     }
 
-    //TODO довести до ума алгоритм, хоть он и работает
+    //TODO довести до ума алгоритм, не работает
     private void sortPartArrayBestTime(int leftIndex, int rightIndex){
         if (leftIndex >= rightIndex)
             return;
