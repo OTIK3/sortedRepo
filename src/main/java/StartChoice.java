@@ -22,14 +22,7 @@ public class StartChoice {
         while(true){
             choiceSort();
             initSizeAndBound();
-
-            System.out.print("\nВыберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
-            int activeFile = in.nextInt();
-            isFile = activeFile > 0;
-
-            System.out.print("Выводить-ли скорость выполнения сортировки (1 - да, 0 - нет): ");
-            int time = in.nextInt();
-            isTimed = time > 0;
+            choiceOutput();
 
             sort = FabricSorts.getSortByIndex(index, size, bound);
             sortAndOutput();
@@ -60,6 +53,16 @@ public class StartChoice {
         bound = in.nextInt();
     }
 
+    private static void choiceOutput(){
+        System.out.print("\nВыберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
+        int activeFile = in.nextInt();
+        isFile = activeFile > 0;
+
+        System.out.print("Выводить-ли скорость выполнения сортировки (1 - да, 0 - нет): ");
+        int time = in.nextInt();
+        isTimed = time > 0;
+    }
+
     private static void sortAndOutput(){
         System.out.println("\n---> Начинается сортировка " + sort.getClass().getSimpleName() +  " ...");
         long startTime = System.nanoTime();
@@ -88,6 +91,7 @@ public class StartChoice {
     private static boolean repeatMenu(){
         System.out.println("Выберите опцию: ");
         System.out.print(
+                "\t0 -> Выйти\n" +
                 "\t1 -> Повторить сортировку для новых данных\n" +
                 "\t2 -> Повторить сортировку для другой размерности\n" +
                 "\t3 -> Выбрать другую сортировку по тем же данным\n" +
@@ -98,6 +102,9 @@ public class StartChoice {
 
         boolean isActive = true;
         switch (choiceValue){
+            case 0 -> {
+                System.exit(1);
+            }
             case 1 -> {
                 sort = FabricSorts.getSortByIndex(index, size, bound);
                 sortAndOutput();

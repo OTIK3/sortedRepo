@@ -4,8 +4,10 @@ import sorts.Sort;
 import java.util.List;
 
 public class CocktailSort extends Sort {
-    private int swapIndex = -1;
-    private int swapValue = -1;
+    private int saveIterationIndex = -1;
+    private int saveIterationValue = -1;
+    private int lastIndexRight = -1;
+    private int lastIndexLeft = -1;
     private boolean isSorted;
 
     public CocktailSort(List<Integer> array) {
@@ -18,57 +20,64 @@ public class CocktailSort extends Sort {
 
     @Override
     public void sort() {
+        lastIndexLeft = 1;
+        lastIndexRight = sortedArray.size() - 1;
         for (int i = 0; i < sortedArray.size()/2; i++) {
-            rightToLeft(sortedArray.size() - i - 1, i + 1);
+            rightToLeft(lastIndexLeft, lastIndexRight);
 
             if (isSorted) return;
 
-            leftToRight(i + 1, sortedArray.size() - i - 1);
+            leftToRight(lastIndexLeft, lastIndexRight);
         }
     }
 
     private void rightToLeft(int startIndex, int endIndex){
         isSorted = true;
-        for (int j = startIndex; j >= endIndex; j--) {
-            if ((swapIndex >= 0 ? swapValue : sortedArray.get(j)) < sortedArray.get(j - 1)){
-                if (swapIndex < 0) {
-                    swapIndex = j;
-                    swapValue = sortedArray.get(swapIndex);
+        for (int j = endIndex; j >= startIndex; j--) {
+            if ((saveIterationIndex >= 0 ? saveIterationValue : sortedArray.get(j)) < sortedArray.get(j - 1)){
+                if (saveIterationIndex < 0) {
+                    saveIterationIndex = j;
+                    saveIterationValue = sortedArray.get(saveIterationIndex);
                 }
 
                 sortedArray.set(j, sortedArray.get(j - 1));
                 isSorted = false;
 
-                if (endIndex == j) {
-                    sortedArray.set(j - 1, swapValue);
+                if (startIndex == j) {
+                    sortedArray.set(j - 1, saveIterationValue);
                 }
+                lastIndexLeft = j;
             }
-            else if (swapIndex >= 0){
-                sortedArray.set(j, swapValue);
-                swapIndex = -1;
+            else if (saveIterationIndex >= 0){
+                sortedArray.set(j, saveIterationValue);
+                saveIterationIndex = -1;
+                lastIndexLeft = j;
             }
         }
-        swapIndex = -1;
+        saveIterationIndex = -1;
     }
 
     private void leftToRight(int startIndex, int endIndex){
         for (int j = startIndex; j < endIndex; j++) {
-            if ((swapIndex >= 0 ? swapValue : sortedArray.get(j)) > sortedArray.get(j + 1)){
-                if (swapIndex < 0) {
-                    swapIndex = j;
-                    swapValue = sortedArray.get(swapIndex);
+            if ((saveIterationIndex >= 0 ? saveIterationValue : sortedArray.get(j)) > sortedArray.get(j + 1)){
+                if (saveIterationIndex < 0) {
+                    saveIterationIndex = j;
+                    saveIterationValue = sortedArray.get(saveIterationIndex);
                 }
 
                 sortedArray.set(j, sortedArray.get(j + 1));
 
-                if (endIndex - 1 == j)
-                    sortedArray.set(j + 1, swapValue);
+                if (endIndex - 1 == j) {
+                    sortedArray.set(j + 1, saveIterationValue);
+                }
+                lastIndexRight = j;
             }
-            else if (swapIndex >= 0){
-                sortedArray.set(j, swapValue);
-                swapIndex = -1;
+            else if (saveIterationIndex >= 0){
+                sortedArray.set(j, saveIterationValue);
+                saveIterationIndex = -1;
+                lastIndexRight = j;
             }
         }
-        swapIndex = -1;
+        saveIterationIndex = -1;
     }
 }
