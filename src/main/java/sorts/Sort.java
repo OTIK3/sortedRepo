@@ -15,7 +15,7 @@ public abstract class Sort {
     }
 
     public Sort(int size, int bound){
-        this.array = RandomElements.getRandomIntegerElements(size, bound);
+        this.array = RandomElements.getRandomElements(size, bound);
         this.sortedArray = new ArrayList<>(array);
     }
 
