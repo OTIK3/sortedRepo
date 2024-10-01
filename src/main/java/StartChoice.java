@@ -11,20 +11,20 @@ public class StartChoice {
     private static final Scanner in = new Scanner(System.in);
     private static final List<SortsEnum> enums = List.of(SortsEnum.values());
     private static Sort sort;
+    private static int choiceValue;
     private static boolean isFile, isTimed;
     private static int index;
     private static int size;
     private static int bound;
+    private static boolean isUnique = false;
 
     @SneakyThrows
     public static void start(){
         System.out.println("\n\nДобро пожаловать в меню выбора сортировок!\n");
         while(true){
             choiceSort();
-            initSizeAndBound();
+            initSizeBoundUnique();
             choiceOutput();
-
-            sort = FabricSorts.getSortByIndex(index, size, bound);
             sortAndOutput();
 
             boolean isActive;
@@ -35,14 +35,16 @@ public class StartChoice {
 
     private static void choiceSort(){
         System.out.println("\nВыберите сортировку (0 -> выход):");
-        enums.forEach(v -> System.out.println("\t " + v.getIndex() + " -> " + v.getName()));
+        for (int i = 0; i < enums.size(); i++) {
+            System.out.println("\t " + (i + 1) + " -> " + enums.get(i).getName());
+        }
         System.out.print("\t -> ");
         do index = in.nextInt();
         while (index < 0 || index > enums.size());
         if (index == 0) System.exit(0);
     }
 
-    private static void initSizeAndBound(){
+    private static void initSizeBoundUnique(){
         System.out.println("\nВыберите количество элементов и диапазон значение от 0 до ...");
 
         System.out.print("\t Количество элементов -> ");
@@ -51,19 +53,31 @@ public class StartChoice {
 
         System.out.print("\t Диапазон значений -> ");
         bound = in.nextInt();
+
+        if (size <= bound && index != 4){
+            System.out.print("\nНужны ли уникальные значения (1 - да, 0 - нет): ");
+            isUnique = in.nextInt() > 0;
+        }
+        else if (index == 4)
+            isUnique = true;
     }
 
     private static void choiceOutput(){
-        System.out.print("\nВыберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
-        int activeFile = in.nextInt();
-        isFile = activeFile > 0;
+        System.out.print("Выберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
+        isFile = in.nextInt() > 0;
 
         System.out.print("Выводить-ли скорость выполнения сортировки (1 - да, 0 - нет): ");
-        int time = in.nextInt();
-        isTimed = time > 0;
+        isTimed = in.nextInt() > 0;
     }
 
     private static void sortAndOutput(){
+        if (choiceValue == 3)
+            sort = FabricSorts.getSortByIndexWithArray(index, sort.getArray());
+        else
+            sort = isUnique ?
+                    FabricSorts.getSortByIndexWithUniqueValues(index, size, bound, true):
+                    FabricSorts.getSortByIndex(index, size, bound);
+
         System.out.println("\n---> Начинается сортировка " + sort.getClass().getSimpleName() +  " ...");
         long startTime = System.nanoTime();
         sort.sort();
@@ -98,7 +112,7 @@ public class StartChoice {
                 "\t4... -> Вызвать меню выбора\n\t-> "
         );
 
-        int choiceValue = in.nextInt();
+        choiceValue = in.nextInt();
 
         boolean isActive = true;
         switch (choiceValue){
@@ -106,17 +120,14 @@ public class StartChoice {
                 System.exit(1);
             }
             case 1 -> {
-                sort = FabricSorts.getSortByIndex(index, size, bound);
                 sortAndOutput();
             }
             case 2 -> {
-                initSizeAndBound();
-                sort = FabricSorts.getSortByIndex(index, size, bound);
+                initSizeBoundUnique();
                 sortAndOutput();
             }
             case 3 -> {
                 choiceSort();
-                sort = FabricSorts.getSortByIndexWithArray(index, sort.getArray());
                 sortAndOutput();
             }
             default -> {

@@ -18,6 +18,15 @@ public class FabricSorts {
     }
 
     @SneakyThrows
+    public static Sort getSortByIndexWithUniqueValues(int index, int size, int bound, boolean isUnique){
+        Constructor<?> constructor = SortsEnum.values()[index - 1].getClassSort()
+                .getDeclaredConstructor(int.class, int.class, boolean.class);
+        constructor.setAccessible(true);
+
+        return (Sort) constructor.newInstance(size, bound, isUnique);
+    }
+
+    @SneakyThrows
     public static Sort getSortByIndexWithArray(int index, List<Integer> array){
         Constructor<?> constructor = SortsEnum.values()[index - 1].getClassSort()
                 .getDeclaredConstructor(List.class);

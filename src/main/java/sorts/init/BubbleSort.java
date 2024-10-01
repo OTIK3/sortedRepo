@@ -12,6 +12,10 @@ public class BubbleSort extends Sort {
         super(size, bound);
     }
 
+    public BubbleSort(int size, int bound, boolean isUnique) {
+        super(size, bound, isUnique);
+    }
+
     @Override
     public void sort() {
         for (int i = 0; i < sortedArray.size(); i++) {

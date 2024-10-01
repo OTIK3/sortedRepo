@@ -19,6 +19,13 @@ public abstract class Sort {
         this.sortedArray = new ArrayList<>(array);
     }
 
+    public Sort(int size, int bound, boolean isUnique){
+        this.array = isUnique?
+                RandomElements.getRandomUniqueElements(size, bound):
+                RandomElements.getRandomElements(size, bound);
+        this.sortedArray = new ArrayList<>(array);
+    }
+
     public abstract void sort();
 
     public List<Integer> getArray(){

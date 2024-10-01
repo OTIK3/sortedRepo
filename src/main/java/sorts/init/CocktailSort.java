@@ -18,6 +18,10 @@ public class CocktailSort extends Sort {
         super(size, bound);
     }
 
+    public CocktailSort(int size, int bound, boolean isUnique) {
+        super(size, bound, isUnique);
+    }
+
     @Override
     public void sort() {
         lastIndexLeft = 1;

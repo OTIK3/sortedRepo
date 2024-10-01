@@ -14,6 +14,10 @@ public class QuickSort extends Sort {
         super(size, bound);
     }
 
+    public QuickSort(int size, int bound, boolean isUnique) {
+        super(size, bound, isUnique);
+    }
+
     @Override
     public void sort() {
         quickSort(0, sortedArray.size() - 1);
