@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Random;
 
-//TODO исправить уникальные элементы
 public class RandomElements {
     private static final Random rand = new Random();
     private static ArrayList<Integer> list = new ArrayList<>();

@@ -8,7 +8,8 @@ public enum SortsEnum {
     BUBBLE("Пузырьковая сортировка", "BubbleSort"),
     COCKTAIL("Шейкер сортировка", "CocktailSort"),
     QUICK("Быстрая сортировка", "QuickSort"),
-    BINARY("Бинарная сортировка", "TreeSort");
+    BINARY("Бинарная сортировка", "TreeSort"),
+    COUNTING("Сортировка подсчетом", "CountingSort");
 
     private final String name;
     private final Class<?> classSort;

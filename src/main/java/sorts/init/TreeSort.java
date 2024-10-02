@@ -37,6 +37,7 @@ public class TreeSort extends Sort {
         searchLeft(node);
     }
 
+    //симметричный обход bst дерева
     private void searchLeft(Node node){
         if (node != null) {
             searchLeft(node.left);
