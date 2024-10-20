@@ -1,6 +1,8 @@
 import lombok.SneakyThrows;
+import sorts.InternalSort;
 import sorts.Sort;
 import sorts.enums.SortsEnum;
+import sorts.init.NaturalExternalSort;
 import sorts.support.Correct;
 import sorts.support.FabricSorts;
 
@@ -10,7 +12,7 @@ import java.util.Scanner;
 public class StartChoice {
     private static final Scanner in = new Scanner(System.in);
     private static final List<SortsEnum> enums = List.of(SortsEnum.values());
-    private static Sort sort;
+    private static InternalSort internalSort;
     private static int choiceValue;
     private static boolean isFile, isTimed;
     private static int index;
@@ -21,15 +23,21 @@ public class StartChoice {
     @SneakyThrows
     public static void start(){
         System.out.println("\n\nДобро пожаловать в меню выбора сортировок!\n");
+        System.out.print("Выберите какие сортировки использовать (0 -> внешние, 1 -> внутренние): ");
         while(true){
-            choiceSort();
-            initSizeBoundUnique();
-            choiceOutput();
-            sortAndOutput();
+            int choiceSort = in.nextInt();
+            if (choiceSort != 0){
+                choiceSort();
+                initSizeBoundUnique();
+                choiceOutput();
+                sortAndOutput();
 
-            boolean isActive;
-            do  isActive = repeatMenu();
-            while (isActive);
+                boolean isActive;
+                do  isActive = repeatMenu();
+                while (isActive);
+            }
+            else
+                startNaturalSort();
         }
     }
 
@@ -72,33 +80,28 @@ public class StartChoice {
 
     private static void sortAndOutput(){
         if (choiceValue == 3)
-            sort = FabricSorts.getSortByIndexWithArray(index, sort.getArray());
+            internalSort = FabricSorts.getSortByIndexWithArray(index, internalSort.getArray());
         else
-            sort = isUnique ?
+            internalSort = isUnique ?
                     FabricSorts.getSortByIndexWithUniqueValues(index, size, bound, true):
                     FabricSorts.getSortByIndex(index, size, bound);
 
-        System.out.println("\n---> Начинается сортировка " + sort.getClass().getSimpleName() +  " ...");
-        long startTime = System.nanoTime();
-        sort.sort();
-        long endTime = System.nanoTime();
-        long runTime = endTime - startTime;
-        System.out.println("---> Сортировка закончилась...");
+        long runTime = sortTime(internalSort);
 
         System.out.println("---> Идет вывод в зависимости от выбранных данных:");
         if (isFile)
-            ActiveFile.inputArrayToFile(sort);
+            ActiveFile.inputArrayToFile(internalSort);
         else
-            DisplayArray.output(sort);
+            DisplayArray.output(internalSort);
 
         if (isTimed) {
             System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
         }
 
         System.out.println("\n\t Данные проверены и они" +
-                (Correct.isValidSortArray(sort.getSortedArray()) ? " ": " не ") + "корректны");
+                (Correct.isValidSortArray(internalSort.getSortedArray()) ? " ": " не ") + "корректны");
         System.out.println("\t Количество элементов до и после сортировки -> " +
-                sort.getArray().size() + " : " + sort.getSortedArray().size());
+                internalSort.getArray().size() + " : " + internalSort.getSortedArray().size());
         System.out.println("\t Данные записаны, если выбрали файл, то можете в него посмотреть\n");
     }
 
@@ -136,5 +139,23 @@ public class StartChoice {
         }
 
         return isActive;
+    }
+
+    private static void startNaturalSort(){
+        System.out.println("Введите название файла с элементами:");
+        var fileName = in.next();
+
+        var sort = new NaturalExternalSort(fileName);
+        var runTime = sortTime(sort);
+        System.out.println("---> Время выполнения сортировки: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
+    }
+
+    private static long sortTime(Sort sort){
+        System.out.println("\n---> Начинается сортировка " + sort.getClass().getSimpleName() +  " ...");
+        long startTime = System.nanoTime();
+        sort.sort();
+        long endTime = System.nanoTime();
+        System.out.println("---> Сортировка закончилась...");
+        return endTime - startTime;
     }
 }

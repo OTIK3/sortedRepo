@@ -5,11 +5,11 @@ import lombok.SneakyThrows;
 
 @Getter
 public enum SortsEnum {
-    BUBBLE("Пузырьковая сортировка", "BubbleSort"),
-    COCKTAIL("Шейкер сортировка", "CocktailSort"),
-    QUICK("Быстрая сортировка", "QuickSort"),
-    BINARY("Бинарная сортировка", "TreeSort"),
-    COUNTING("Сортировка подсчетом", "CountingSort");
+    BUBBLE("Пузырьковая сортировка", "BubbleInternalSort"),
+    COCKTAIL("Шейкер сортировка", "CocktailInternalSort"),
+    QUICK("Быстрая сортировка", "QuickInternalSort"),
+    BINARY("Бинарная сортировка", "TreeInternalSort"),
+    COUNTING("Сортировка подсчетом", "CountingInternalSort");
 
     private final String name;
     private final Class<?> classSort;

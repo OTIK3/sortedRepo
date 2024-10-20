@@ -1,5 +1,5 @@
 import lombok.SneakyThrows;
-import sorts.Sort;
+import sorts.InternalSort;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -7,28 +7,39 @@ import java.util.List;
 
 public class ActiveFile {
     @SneakyThrows
-    public static void inputArrayToFile(Sort sort){
+    public static void inputArrayToFile(InternalSort internalSort){
         FileWriter writer = new FileWriter("example.txt", false);
-        List<Integer> array = sort.getArray();
-        List<Integer> sortedArray = sort.getSortedArray();
+        List<Integer> array = internalSort.getArray();
+        List<Integer> sortedArray = internalSort.getSortedArray();
 
         writer.write("Массив до сортировки:\n");
-        for (int i = 0; i < array.size(); i++) {
-            writer.write(array.get(i) + " ");
-            if ((i + 1) % 10 == 0){
-                writer.write("\n");
+        if (array.size() > 5000000){
+            return;
+        }
+        else {
+            for (int i = 0; i < array.size(); i++) {
+                writer.write(array.get(i) + " ");
+                if ((i + 1) % 10 == 0) {
+                    writer.write("\n");
+                }
             }
         }
 
         writer.write("\n");
 
         writer.write("Массив после сортировки:\n");
-        for (int i = 0; i < sortedArray.size(); i++) {
-            writer.write(sortedArray.get(i) + " ");
-            if ((i + 1) % 10 == 0){
-                writer.write("\n");
+        if (array.size() > 5000000){
+            return;
+        }
+        else{
+            for (int i = 0; i < sortedArray.size(); i++) {
+                writer.write(sortedArray.get(i) + " ");
+                if ((i + 1) % 10 == 0){
+                    writer.write("\n");
+                }
             }
         }
+
         writer.close();
     }
 

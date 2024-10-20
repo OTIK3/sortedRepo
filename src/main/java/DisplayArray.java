@@ -1,10 +1,10 @@
-import sorts.Sort;
+import sorts.InternalSort;
 
 public class DisplayArray {
-    public static void output(Sort sort){
+    public static void output(InternalSort internalSort){
         System.out.println("Массив до: ");
-        System.out.println(sort.getArray());
+        System.out.println(internalSort.getArray());
         System.out.println("\nМассив после: ");
-        System.out.println(sort.getSortedArray());
+        System.out.println(internalSort.getSortedArray());
     }
 }
