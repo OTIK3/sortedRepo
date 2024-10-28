@@ -1,4 +1,6 @@
 import lombok.SneakyThrows;
+import search.Search;
+import search.init.BinarySearch;
 import sorts.InternalSort;
 import sorts.Sort;
 import sorts.enums.SortsEnum;
@@ -20,8 +22,56 @@ public class StartChoice {
     private static int bound;
     private static boolean isUnique = false;
 
+    public static void startSearch(){
+        System.out.println("\n\nДобро пожаловать в меню выбора поиска!\n");
+        //TODO переделаю
+        while(true){
+            System.out.print("\nВыберите какой поиск будем использовать (0 - выход): ");
+            System.out.println("1 -> BinarySearch");
+            do{
+                choiceValue = in.nextInt();
+                if (choiceValue == 0)
+                    System.exit(0);
+            } while (choiceValue != 1);
+
+            initSizeBoundUnique();
+            //choiceOutput();
+            Search search = new BinarySearch(size, bound);
+
+//            if (isFile)
+//                ActiveFile.inputArrayToFile(search);
+//            else
+//                System.out.println(search.getSortedValues().toString());
+            System.out.println(search.getSortedValues().toString());
+
+            System.out.print("Введите значение от " + 0 + " до " + bound + " для поиска: ");
+            int searchingValue;
+            do{
+                searchingValue= in.nextInt();
+            } while (searchingValue < 0 && searchingValue > bound);
+
+            System.out.println("Начинаем поиск!...");
+            long startTime = System.nanoTime();
+            int response = search.search(searchingValue);
+            long endTime = System.nanoTime();
+            System.out.println("Поиск завершен");
+            long runTime = endTime - startTime;
+
+
+
+            if (isTimed) {
+                System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
+            }
+
+            boolean isSearch = response > 0;
+            System.out.println("Значение" + (isSearch? " ": " не ") + "присутствует в массиве");
+            if (isSearch)
+                System.out.println("Оно стоит на позиции: " + response);
+        }
+    }
+
     @SneakyThrows
-    public static void start(){
+    public static void startSort(){
         System.out.println("\n\nДобро пожаловать в меню выбора сортировок!\n");
         System.out.print("Выберите какие сортировки использовать (0 -> внешние, 1 -> внутренние): ");
         while(true){

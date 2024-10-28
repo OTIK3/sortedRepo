@@ -1,4 +1,5 @@
 import lombok.SneakyThrows;
+import search.Search;
 import sorts.InternalSort;
 
 import java.io.FileInputStream;
@@ -8,7 +9,7 @@ import java.util.List;
 public class ActiveFile {
     @SneakyThrows
     public static void inputArrayToFile(InternalSort internalSort){
-        FileWriter writer = new FileWriter("example.txt", false);
+        FileWriter writer = new FileWriter("exampleSort.txt", false);
         List<Integer> array = internalSort.getArray();
         List<Integer> sortedArray = internalSort.getSortedArray();
 
@@ -40,6 +41,13 @@ public class ActiveFile {
             }
         }
 
+        writer.close();
+    }
+
+    @SneakyThrows
+    public static void inputArrayToFile(Search search){
+        FileWriter writer = new FileWriter("exampleSearch.txt", false);
+        writer.write(search.getSortedValues().toString());
         writer.close();
     }
 
