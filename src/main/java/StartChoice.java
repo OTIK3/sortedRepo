@@ -1,6 +1,9 @@
 import lombok.SneakyThrows;
 import search.Search;
+import search.enums.SearchEnum;
 import search.init.BinarySearch;
+import search.init.BinaryTrackingSearch;
+import search.support.FabricSearch;
 import sorts.InternalSort;
 import sorts.Sort;
 import sorts.enums.SortsEnum;
@@ -20,54 +23,68 @@ public class StartChoice {
     private static int index;
     private static int size;
     private static int bound;
+    private static int responseSearch = -1;
     private static boolean isUnique = false;
 
     public static void startSearch(){
+        List<SearchEnum> searchEnums = List.of(SearchEnum.values());
         System.out.println("\n\nДобро пожаловать в меню выбора поиска!\n");
-        //TODO переделаю
         while(true){
-            System.out.print("\nВыберите какой поиск будем использовать (0 - выход): ");
-            System.out.println("1 -> BinarySearch");
+            System.out.println("\nВыберите какой поиск будем использовать (0 - выход): ");
+            for (int i = 0; i < searchEnums.size(); i++) {
+                System.out.println("\t " + (i + 1) + " -> " + searchEnums.get(i).getName());
+            }
+            System.out.print("\t -> ");
+
             do{
-                choiceValue = in.nextInt();
-                if (choiceValue == 0)
+                index = in.nextInt();
+                if (index == 0)
                     System.exit(0);
-            } while (choiceValue != 1);
+            } while (index < 0 || index > searchEnums.size());
 
             initSizeBoundUnique();
-            //choiceOutput();
-            Search search = new BinarySearch(size, bound);
+            choiceOutput();
+            Search search = FabricSearch.getSearchByIndex(index, size, bound);
 
-//            if (isFile)
-//                ActiveFile.inputArrayToFile(search);
-//            else
-//                System.out.println(search.getSortedValues().toString());
-            System.out.println(search.getSortedValues().toString());
+            if (isFile) ActiveFile.inputArrayToFile(search);
+            else System.out.println(search.getSortedValues().toString());
 
+            searchTracking(search);
+        }
+    }
+
+    private static void searchTracking(Search search){
+        while(true){
             System.out.print("Введите значение от " + 0 + " до " + bound + " для поиска: ");
             int searchingValue;
             do{
                 searchingValue= in.nextInt();
             } while (searchingValue < 0 && searchingValue > bound);
 
-            System.out.println("Начинаем поиск!...");
-            long startTime = System.nanoTime();
-            int response = search.search(searchingValue);
-            long endTime = System.nanoTime();
-            System.out.println("Поиск завершен");
-            long runTime = endTime - startTime;
-
-
+            var runTime = searchTime(search, searchingValue);
 
             if (isTimed) {
                 System.out.println("\nВремя выполнения алгоритма: " + runTime + "n/s (" + runTime/1e6 + "m/s)");
             }
 
-            boolean isSearch = response > 0;
-            System.out.println("Значение" + (isSearch? " ": " не ") + "присутствует в массиве");
+            boolean isSearch = responseSearch > 0;
+            System.out.println("Значение " + searchingValue + (isSearch? " ": " не ") + "присутствует в массиве");
             if (isSearch)
-                System.out.println("Оно стоит на позиции: " + response);
+                System.out.println("Оно стоит на позиции: " + responseSearch);
+            System.out.println("\nПродолжить ли выполнение поиска с теми же данными? (1 - да, 0 - нет)");
+            choiceValue = in.nextInt();
+            if (choiceValue == 0)
+                return;
         }
+    }
+
+    private static long searchTime(Search search, int searchValue){
+        System.out.println("\n---> Начинается поиск " + search.getClass().getSimpleName() +  " ...");
+        long startTime = System.nanoTime();
+        responseSearch = search.search(searchValue);
+        long endTime = System.nanoTime();
+        System.out.println("---> Поиск закончился...");
+        return endTime - startTime;
     }
 
     @SneakyThrows
@@ -124,7 +141,7 @@ public class StartChoice {
         System.out.print("Выберите вывод в консоль или файл (1 - файл, 0 - консоль): ");
         isFile = in.nextInt() > 0;
 
-        System.out.print("Выводить-ли скорость выполнения сортировки (1 - да, 0 - нет): ");
+        System.out.print("Выводить-ли скорость выполнения (1 - да, 0 - нет): ");
         isTimed = in.nextInt() > 0;
     }
 
